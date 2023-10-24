@@ -21,7 +21,6 @@ function run `$1` `$2`(){
         rm df
         return 0
     fi
-    exit 0
 }
 #---------------------------------------------------------------
 
@@ -52,7 +51,6 @@ function update-MacOS-github(){
     git add .
     git commit -am "$(date)"
     git push
-    exit 0
 
 }
 #---------------------------------------------------------------
@@ -172,7 +170,6 @@ function search '$1' '$2' '$3'()
     
     if [ -z $1 ]; then 
         open -a Microsoft\ Edge\ Dev
-        return 0
     fi 
 }
 
