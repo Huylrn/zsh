@@ -84,8 +84,7 @@ function git-$1(){
     exit 0
 }
 #---------------------------------------------------------------
-function search '$1' '$2' '$3'() 
-{
+function search '$1' '$2' '$3'(){
 # -b
     if [ $1 = -b ]; then
         web_search bing "$2"

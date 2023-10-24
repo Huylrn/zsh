@@ -36,3 +36,4 @@ alias "fzf-p"='fzf --preview "bat --color=always --style=numbers --line-range=:1
 alias b='bat'
 alias c='code'
 alias ec='echo'
+
