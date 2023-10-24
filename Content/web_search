@@ -4,6 +4,7 @@
      [ 1: Learn
        2: Docs
        3: TEMP
-       4: MacOS ]
+       4: zsh
+       5: MacOS ]
   -t : Translation; input = [vn,en]; output [vn -> en, en -> vn]
   -y : Youtube

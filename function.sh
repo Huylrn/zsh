@@ -113,6 +113,11 @@ function search '$1' '$2' '$3'()
             ;;
 
             "4") 
+                open https://github.com/Huylrn/zsh
+                return 0
+            ;;
+
+            "5") 
                 open https://github.com/Huylrn/macos
                 return 0
             ;;
