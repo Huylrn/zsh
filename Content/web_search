@@ -1,0 +1,9 @@
+  -h : Help
+  -b : Search with bing
+  -g : Github
+     [ 1: Learn
+       2: Docs
+       3: TEMP
+       4: MacOS ]
+  -t : Translation; input = [vn,en]; output [vn -> en, en -> vn]
+  -y : Youtube
