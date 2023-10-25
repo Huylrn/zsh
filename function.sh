@@ -85,6 +85,13 @@ function git-$1(){
 }
 #---------------------------------------------------------------
 function search '$1' '$2' '$3'(){
+
+# default    
+    if [ -z $1 ]; then 
+        open -a Microsoft\ Edge\ Dev
+        return 0
+    fi 
+
 # -b
     if [ $1 = -b ]; then
         web_search bing "$2"
@@ -134,7 +141,8 @@ function search '$1' '$2' '$3'(){
             fi
             web_search bing "Dịch sang tiếng Việt : $3 $text"
             return 0
-        else [ $2 = vn ]
+        fi
+        if [ $2 = vn ]; then
             if [ -z $3 ]; then 
                 echo "Translation to English:"
                 read text
@@ -167,9 +175,6 @@ function search '$1' '$2' '$3'(){
         return 0
     fi
     
-    if [ -z $1 ]; then 
-        open -a Microsoft\ Edge\ Dev
-    fi 
 }
 
 
