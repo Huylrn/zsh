@@ -1,15 +1,21 @@
 
 function run `$1` `$2`(){
-    if [ $1 = -cpp ]; then
-        g++ $2 -o df
-        ./df
-        rm df
+    if [[ ${1#*.} = sh ]] || [[ ${1#*.} = shell ]]; then
+        ./$1
+        echo "Exit: 0"
+        return 0
     fi
-
 # Run c++
     if [ ${1#*.} = cpp  ]; then
         g++ $1 -o df
+        
+        # stop when error
+        if [ ! -f $(pwd)/df ]; then
+            return 0
+        fi
+        
         ./df
+        echo "Exit: 0"
         rm df 
         return 0
     fi
@@ -17,8 +23,21 @@ function run `$1` `$2`(){
 # Run c
     if [ ${1#*.} = c  ]; then
         gcc $1 -o df
+        
+        # stop when error
+        if [ ! -f $(pwd)/df ]; then
+            return 0
+        fi
         ./df
+        echo "Exit: 0"
         rm df
+        return 0
+    fi
+
+# Run python
+    if [ ${1#*.} = py  ]; then
+        python3 $1
+        echo "Exit: 0"
         return 0
     fi
 }
@@ -65,8 +84,7 @@ function git-$1(){
 
     if [ $1 = f ]; then
         git diff
-        echo "Label: "
-        read i
+        read "?Label:" i
 
         if [ $i = q ]; then
             return 0
@@ -94,6 +112,10 @@ function search '$1' '$2' '$3'(){
 
 # -b
     if [ $1 = -b ]; then
+        if [ -z $2 ]; then
+            echo "Search the web"
+            read "?>" 2
+        fi
         web_search bing "$2"
         return 0
     fi
@@ -137,17 +159,17 @@ function search '$1' '$2' '$3'(){
         if [ $2 = en ]; then
             if [ -z $3 ]; then
                 echo "Dịch sang tiếng Việt:"
-                read text
+                read "?>" 3
             fi
-            web_search bing "Dịch sang tiếng Việt : $3 $text"
+            web_search bing "Dịch sang tiếng Việt : $3"
             return 0
         fi
         if [ $2 = vn ]; then
             if [ -z $3 ]; then 
                 echo "Translation to English:"
-                read text
+                read "?>" 3
             fi
-            web_search bing "Translation to English: $3 $text"
+            web_search bing "Translation to English: $3"
             return 0
         fi
 
