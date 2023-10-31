@@ -1,16 +1,27 @@
 #update MacOS-github
 function update-MacOS-github(){
     #Vim
+    # cd ~/WorkSpace/MacOS/Vim
+    # sudo command rm -rf .vscodevimrc .vimrc
+    cd ~
     cp -R .vscodevimrc .vimrc ~/WorkSpace/MacOS/Vim
-    sudo cp -R .vim ~/WorkSpace/MacOS/Vim
+    cp -R .vim ~/WorkSpace/MacOS/Vim~/WorkSpace/MacOS/VsCode
 
     #Vscode
-    cp ~/Library/Application\ Support/Code/User/settings.json keybindings.json ~/WorkSpace/MacOS/VsCode
+    # cd ~/WorkSpace/MacOS/VsCode
+    # sudo command rm -rf settings.json keybindings.json
+    
+    cp ~/Library/Application\ Support/Code/User/settings.json keybindings.json 
 
     #Config
-    sudo cp -R .config ~/WorkSpace/MacOS/Config
-    sudo cp -R .oh-my-zsh/custom ~/WorkSpace/MacOS/Config/.oh-my-zsh
-    cp -R .zshrc  ~/WorkSpace/MacOS/Config
+    # cd ~/WorkSpace/MacOS/Config
+    # sudo command rm -rf .config .zshrc
+    
+    cp -R .config .zshrc ~/WorkSpace/MacOS/Config
+
+    # sudo command rm -rf .oh-my-zsh/custom
+    
+    cp -R .oh-my-zsh/custom ~/WorkSpace/MacOS/Config/.oh-my-zsh
 
     #git-cmd
     cd ~/WorkSpace/MacOS

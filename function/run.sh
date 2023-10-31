@@ -43,6 +43,6 @@ function run `$1` `$2`(){
 
 #------------- 
 function df(){
-  ./df
-  rm df
+    ./df
+    rm df
 }
