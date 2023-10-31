@@ -5,7 +5,10 @@ alias git-i='git- i'
 alias gp='git pull'
 alias gs='git push'
 alias gst='git status'
-
+alias ga='git add .'
+alias gd='git diff'
+alias gsh='git show'
+alias gl='git log'
 
 alias ls='colorls'
 alias l='ls -lA --sd'
@@ -33,7 +36,7 @@ alias pwc='copypath'
 
 alias "fzf-p"='fzf --preview "bat --color=always --style=numbers --line-range=:1000 {}"'
 
-alias b='bat'
 alias c='code'
 alias ec='echo'
 
+alias orm='command rm'

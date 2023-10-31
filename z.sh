@@ -1,1 +1,0 @@
-ZSHZ_CASE=smart
