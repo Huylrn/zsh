@@ -87,7 +87,7 @@ function search '$1' '$2' '$3'(){
 
 # -h
     if [ $1 = -h ]; then
-        cat /Users/huuynguyen/.config/zsh/Content/web_search
+        cat ~/.config/zsh/Content/web_search
         echo ""
         
         return 0
