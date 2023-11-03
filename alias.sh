@@ -10,7 +10,7 @@ alias gd='git diff'
 alias gsh='git show'
 alias gl='git log'
 
-alias ls='colorls'
+alias ls='colorls --sd'
 alias l='ls -lA --sd'
 alias ll='ls --tree --sd'
 alias la='ls -a --sd'
