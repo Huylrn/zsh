@@ -2,6 +2,7 @@ function git-$1(){
     if [ $1 = i ]; then 
         touch -c .gitignore
         echo ".DS_store" >> .gitignore
+        echo ".vscode" >> .gitignore
         git init
         git status
         return 0

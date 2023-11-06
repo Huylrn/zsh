@@ -40,3 +40,5 @@ alias c='code'
 alias ec='echo'
 
 alias orm='command rm'
+alias Drive_Huuy='/Users/$(whoami)/Library/CloudStorage/GoogleDrive-huuynguyendd@gmail.com/My\ Drive'
+alias OneDrive='/Users/$(whoami)/Library/CloudStorage/OneDrive-Personal'
