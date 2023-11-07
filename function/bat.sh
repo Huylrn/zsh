@@ -1,3 +1,8 @@
 b '$1'(){ 
-    bat -l ${1#*.} $1
+    tmp=${1##*.}
+    if [ -n $tmp ]; then
+        bat $1
+    else
+        bat -l $tmp $1
+    fi
 }

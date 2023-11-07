@@ -1,4 +1,5 @@
-function search '$1' '$2' '$3'(){
+function search (){
+# function search '$1' '$2' '$3'(){
 
 # default    
     if [ -z $1 ]; then 
