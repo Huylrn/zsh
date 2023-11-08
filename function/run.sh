@@ -1,4 +1,4 @@
-function run `$1` `$2`(){
+function run(){
     if [[ ${1#*.} = sh ]] || [[ ${1#*.} = shell ]] || [[ ${1#*.} = zsh ]]; then
         ./$1
         echo "Exit: 0"
