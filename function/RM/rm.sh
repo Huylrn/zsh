@@ -45,7 +45,6 @@ function rm(){
         _check_option_fn_rm u
         if [ $? -eq 0 ] ; then
             _option_undo_fn_rm
-            # path_cache_trash=""
             [ $? -eq 0 ] && return 0 || return 1
         fi
 

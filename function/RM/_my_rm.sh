@@ -13,9 +13,8 @@ _add_option_fn_rm(){
     _check_option_fn_rm $2
     if [ $? -eq 1 ]; then
         [ -d $1 -o -f $1 ] && {
-            if [ $_message_require_toggle_fn_RM = TRUE ]; then
-                # echo "\033[3;31mrm: $1: is a directory\033[0m"
-                printf "\033[1;32mDo you want to add -$2 option to continue deleting[y/n]:\033[0m"
+            if [ "$_message_require_toggle_fn_RM" = "TRUE" ]; then
+                printf "\033[1;32mDo you want to add -$2 option to continue deleting \033[4;3;31m$1\033[0m \033[3;1;36m($_type_)\033[0m \033[1;32m[y/n]:\033[0m"
                 read -q tf
                 echo 
                 if [ $tf = "y" -o $tf = "Y" ]; then
@@ -32,29 +31,6 @@ _add_option_fn_rm(){
     else
         return 0
     fi
-    # _check_option_fn_rm r
-    # if [ $? -eq 1 ]; then
-    #     [ -d $1 ] && {
-    #         if [ $_message_require_toggle_fn_RM = TRUE ]; then
-    #             echo "\033[3;31mrm: $1: is a directory\033[0m"
-    #             printf "\033[1;32mDo you want to add -r option to continue deleting[y/n]:\033[0m"
-    #             read -q tf
-    #             echo 
-    #             if [ $tf = "y" -o $tf = "Y" ]; then
-    #                 options_rm+="-r"
-    #                 return 0
-    #             else
-    #                 return 1
-    #             fi
-    #         else # TURN OFF REQUIRE MESSAGE 
-    #             options_rm+="-r"
-    #             return 0
-    #         fi
-    #     } || return 0
-    # else
-    #     return 0
-    # fi
-
 }
 
 _option_undo_fn_rm(){
@@ -90,11 +66,13 @@ _option_undo_fn_rm(){
 
 _content_my_cache(){
     if [ -f $1 ]; then
+        chmod u+w $1
         echo >> $1
         echo "Time to delete: $(date)" >> $1
         echo "path:" >> $1
         echo $(realpath $1) >> $1
-    else 
+    else
+        chmod u+w $1 
         echo >> $1/.my_cache
         echo "Time to delete: $(date)" >> $1/.my_cache
         echo "path:" >> $1/.my_cache
@@ -107,21 +85,27 @@ _delete_fn_rm(){
     _content_my_cache $1
     echo "\033[5;2;3;30mDeleting...\033[0m"
     if [ -d $1 ]; then 
-        [ -d $HOME/.trash/dir/$1 ] && mv $HOME/.trash/dir/$1 $HOME/.trash/dir/"$1-replace-in-$(date +%F)"
+        [ -d $HOME/.trash/dir/$1 ] && {
+            local _replace_name=".replace_at_$(date +%H-%M-%S_%d%m%y)"
+            echo "$(command tail -n 1 $HOME/.trash/dir/$(basename $1)/.my_cache)$_replace_name" >> $HOME/.Trash/dir/$1/.my_cache
+            mv $HOME/.trash/dir/$1 $HOME/.trash/dir/"$1$_replace_name"
+        }
         rsync -avh --out-format="%n :: size -> %l bytes" $1 $HOME/.trash/dir && command rm ${options_rm[@]} $1
         [ $? -eq 0 ] && echo "\033[0;35m[Message] \033[4;3;31m$1\033[0m is \033[3;1;36m($_type_)\033[0m ->\033[0m \033[3;32mSuccessfully deleted.\033[0m" || { 
+            local path_deleted_error="$(realpath $1)"
             command rm -rf $1
-            rsync -a $HOME/.trash/dir/$1 ../$1
-            command rm -rf $HOME/.Trash/dir/$1
+            chmod u+w $HOME/.Trash/dir/"$(basename $path_deleted_error)" 
+            command rm -f $HOME/.Trash/dir/"$(basename $path_deleted_error)"/.my_cache
+            rsync -a $HOME/.Trash/dir/"$(basename $path_deleted_error)" "$1-deleted-error" && command rm -rf $HOME/.Trash/dir/"$(basename $path_deleted_error)"
             return 1
         }
     else    
-        [ -f $HOME/.trash/file/$1 ] && mv $HOME/.trash/file/$1 $HOME/.trash/file/"$1-replace-in-$(date +%F)"
+        [ -f $HOME/.trash/file/$1 ] && mv $HOME/.trash/file/$1 $HOME/.trash/file/"$1-replace_at_$(date +%H-%M-%S_%d-%m-%y)"
         rsync -avh --out-format="%n :: size -> %l bytes" $1 $HOME/.trash/file && command rm ${options_rm[@]} $1
         [ $? -eq 0 ] && echo "\033[0;35m[Message] \033[4;3;31m$1\033[0m is \033[3;1;32m($_type_)\033[0m ->\033[0m \033[3;32mSuccessfully deleted.\033[0m" || {
-            command rm -rf $1
-            rsync -a $HOME/.trash/file/$1 
-            command rm -rf $HOME/.Trash/file/$1
+            local path_deleted_error="$(realpath $1)"
+            command rm -f $1
+            rsync -a $HOME/.Trash/file/"$(basename $path_deleted_error)" "$1-deleted-error" && command rm -f $HOME/.Trash/file/"$(basename $path_deleted_error)"
             return 1
         }
     fi
@@ -139,10 +123,12 @@ _my_main_rm(){
     fi
     
     if [ $(command ls -ld $1 | awk '{print $3}') = $(whoami) ]; then
-        _add_option_fn_rm $1 r
-        if [ $? -eq 1 ]; then
-            return 1
-        fi
+        [ -d $1 ] && {
+            _add_option_fn_rm $1 r
+            if [ $? -eq 1 ]; then
+                return 1
+            fi
+        }
         _delete_fn_rm $1
     else
         printf "-> $(pwd)/\033[0;31m$1($(command ls -ld $1 | awk '{print $3}'))\033[0m\033[3;32m is not yours, to skip[y/n]:\033[0m"
