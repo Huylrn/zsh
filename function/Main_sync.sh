@@ -1,1 +1,0 @@
-;qsource sync.sh

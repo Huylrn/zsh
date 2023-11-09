@@ -26,8 +26,7 @@ function rm(){
             _my_main_rm $1
             [ $? -eq 0 ] && return 0 || return 1
         else
-            echo $1  
-            echo "$(pwd)/$1 :No such file or directory."; return 1
+            [ ${$1[1]} = "-" ] && echo "rm: what??" || echo "$(pwd)/$1 :No such file or directory."; return 1
         fi
     else # greater than 1
 
