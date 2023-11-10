@@ -4,13 +4,15 @@ function rm(){
     local dir_or_file=()
     local options_rm=()
     local dir_or_file_none=()
+    local _trash_dir="$HOME/.Trash/dir"
+    local _trash_file="$HOME/.Trash/file"
     
-    # check from .trash
-    if [ ! -d $HOME/.trash/dir ]; then
-        mkdir -p $HOME/.trash/dir
+    # check from .Trash
+    if [ ! -d $HOME/.Trash/dir ]; then
+        mkdir -p $HOME/.Trash/dir
     fi 
-    if [ ! -d $HOME/.trash/file ]; then
-        mkdir -p $HOME/.trash/file
+    if [ ! -d $HOME/.Trash/file ]; then
+        mkdir -p $HOME/.Trash/file
     fi
     
     # "/" is important
@@ -22,11 +24,12 @@ function rm(){
     done
     
     if [ $# -eq 1 ]; then # input = 1
-        if [ -d $@ -o -f $@ ]; then
+        if [ -d $1 -o -f $1 ]; then
+            local _base_name=$(basename $1)
             _my_main_rm $1
-            [ $? -eq 0 ] && return 0 || return 1
+            # [ $? -eq 0 ] && return 0 || return 1
         else
-            [ ${$1[1]} = "-" ] && echo "rm: what??" || echo "$(pwd)/$1 :No such file or directory."; return 1
+            [ ${$1[1]} = "-" ] && echo "rm-Advance: what??" || echo "rm-Advance: $(pwd)/$1 :No such file or directory."; return 1
         fi
     else # greater than 1
 
@@ -51,10 +54,11 @@ function rm(){
         # delete from input
         if [ ${#dir_or_file[@]} -ne 0 ]; then
             for fd in $dir_or_file[@]; do 
+                local _base_name=$(basename $1)
                 _my_main_rm $fd
             done
         elif [ ${#dir_or_file_none[@]} -ne 0 ]; then
-            echo "$(pwd)/${dir_or_file_none[@]} :No such file or directory."
+            echo "rm-Advance: $(pwd)/${dir_or_file_none[@]} :No such file or directory."
             return 1
         fi
     fi
