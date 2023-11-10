@@ -1,0 +1,8 @@
+ -P          -- overwrite files before deleting them
+ -R  -r      -- remove directories and their contents recursively
+ -W          -- attempt to undelete named files
+ -d          -- remove directories as well
+ -f          -- ignore nonexistent files, never prompt
+ -i          -- prompt before every removal
+ -v          -- explain what is being done
+ -u  --undo  -- undo deleted [ rm -u file_name ]

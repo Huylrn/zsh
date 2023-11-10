@@ -1,4 +1,4 @@
-source $HOME/.config/zsh/function/RM/_my_rm.sh
+source $HOME/.config/zsh/function/RM/function.rm-Advance.sh
 function rm(){
     
     local dir_or_file=()
@@ -22,27 +22,44 @@ function rm(){
             return 0
         fi
     done
-    
+
+    for test in $@; do
+        if [ -f $test -o -d $test ]; then
+            dir_or_file+=$test
+        elif [ ${test[1]} = "-" ]; then
+            
+            for item in "$test"; do
+                echo "$item" | fold -w1 | while read -r char; do
+                if [[ $char = "-" ]]; then
+                    continue
+                elif [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i" -o $char = "v" -o $char = "f" -o $char = "R" -o $char = "r" ]; then
+                    continue
+                else
+                    command cat -vs $HOME/.config/zsh/function/RM/help.rm-Advance && return 1
+                fi
+                done
+            done
+            options_rm+=$test
+
+        else
+            dir_or_file_none+=$(basename $test)
+        fi
+    done
+
     if [ $# -eq 1 ]; then # input = 1
         if [ -d $1 -o -f $1 ]; then
-            local _base_name=$(basename $1)
-            _my_main_rm $1
+
+            _rm_Advance_main $1
             # [ $? -eq 0 ] && return 0 || return 1
+        elif [ ${#options_rm} -ne 0 ]; then
+            echo "rm-Advance: $options_rm[@]" && 
+            return 1
         else
-            [ ${$1[1]} = "-" ] && echo "rm-Advance: what??" || echo "rm-Advance: $(pwd)/$1 :No such file or directory."; return 1
+            return 1
         fi
     else # greater than 1
 
         # filter from input
-        for test in $@; do
-            if [ -f $test -o -d $test ]; then
-                dir_or_file+=$test
-            elif [ ${test[1]} = "-" ]; then
-                options_rm+=$test
-            else
-                dir_or_file_none+=$test
-            fi
-        done
         
         # option -u --undo
         _check_option_fn_rm u
@@ -54,12 +71,13 @@ function rm(){
         # delete from input
         if [ ${#dir_or_file[@]} -ne 0 ]; then
             for fd in $dir_or_file[@]; do 
-                local _base_name=$(basename $1)
-                _my_main_rm $fd
+                _rm_Advance_main $fd
             done
         elif [ ${#dir_or_file_none[@]} -ne 0 ]; then
             echo "rm-Advance: $(pwd)/${dir_or_file_none[@]} :No such file or directory."
             return 1
+        elif [ ${#options_rm[@]} -ne 0 ]; then 
+            echo "rm-Advance: ??"
         fi
     fi
 }
