@@ -1,11 +1,15 @@
-source $HOME/.config/zsh/function/RM/function.rm-Advance.sh
+local _RM_ADVANCE=$HOME/.config/zsh/function/RM
+source $_RM_ADVANCE/main.fn.rm-Advance.sh 
+source $_RM_ADVANCE/add.op.rm-Advance.sh
+source $_RM_ADVANCE/undo.op.rm-Advance.sh
+
 function rm(){
-    
     local dir_or_file=()
     local options_rm=()
     local dir_or_file_none=()
     local _trash_dir="$HOME/.Trash/dir"
     local _trash_file="$HOME/.Trash/file"
+    local _error_rm_="\033[0;31mrm-Advance:\033[0m"
     
     # check from .Trash
     if [ ! -d $HOME/.Trash/dir ]; then
@@ -18,7 +22,7 @@ function rm(){
     # "/" is important
     for i in $@; do
         if [ $i = "/" ]; then 
-            echo "\033[0;31m[Warning]\033[0m This is \033[0;33m/\033[0m cannot be deleted \033[0;31m[Warning]\033[0m" 
+            echo "\033[0;31m[Warning]\033[0m This is \033[0;33m$i\033[0m cannot be deleted \033[0;31m[Warning]\033[0m" 
             return 0
         fi
     done
@@ -48,9 +52,8 @@ function rm(){
 
     if [ $# -eq 1 ]; then # input = 1
         if [ -d $1 -o -f $1 ]; then
-
             _rm_Advance_main $1
-            # [ $? -eq 0 ] && return 0 || return 1
+            [ $? -eq 0 ] && return 0 || return 1
         elif [ ${#options_rm} -ne 0 ]; then
             echo "rm-Advance: $options_rm[@]" && 
             return 1
