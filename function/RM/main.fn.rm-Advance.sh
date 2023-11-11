@@ -98,9 +98,9 @@ _delete_fn_rm(){
     # echo
 }
 
-_rm_Advance_main(){
+_main_rm_Advance(){
     if [ ! -d $1 -a ! -f $1 ]; then
-        echo "rm-Advance: $(pwd)/$1 :No such file or directory."
+        echo "rm-Advance: $(realpath $1) :No such file or directory."
         return 1
     elif _check_option_fn_rm u; then
         [ $? -eq 0 ] && echo "  [option: ${options_rm[@]}] :bad substitution."; return 1
@@ -117,7 +117,7 @@ _rm_Advance_main(){
         }
         _delete_fn_rm $1
     else
-        printf "-> $(pwd)/\033[0;31m$1($(command ls -ld $1 | awk '{print $3}'))\033[0m\033[3;32m is not yours, to skip[y/n]:\033[0m"
+        printf "-> ${$(realpath $1)%/*}\033[0;31m$1($(command ls -ld $1 | awk '{print $3}'))\033[0m\033[3;32m is not yours, to skip[y/n]:\033[0m"
         read -q tf
         echo 
         if [[ $tf = "y" ]] || [[ $tf = "Y" ]]; then
