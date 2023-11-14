@@ -39,3 +39,21 @@ _add_option_rm_Advance(){
         return 0
     fi
 }
+_show_output_rm_Advance(){
+    local _place_path="$_RM_ADVANCE/Content"
+    local _end_file=$(($(wc -l $_place_path/tmp.txt | awk '{print $1}')-2)) 
+    sed -n '2,'$_end_file'p' $_place_path/tmp.txt > $_place_path/tmp.show
+    if [ "$option_v" = "TRUE" ]; then
+        while IFS= read -r line; do
+        # print the line
+            echo "$line"
+        # sleep for 1 second
+            sleep 0.0000001
+        done < "$_place_path/tmp.show"
+    fi
+    cat $_place_path/tmp.txt | grep "total size" | awk '{printf "Total size: "$4 " ; "}'
+    printf "directory ($1) ; file ($2)"
+    echo
+    command rm -f $_place_path/tmp.txt $_place_path/tmp.show
+    return
+}

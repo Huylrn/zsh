@@ -1,6 +1,6 @@
 local _RM_ADVANCE=$HOME/.config/zsh/function/RM
 source $_RM_ADVANCE/main.fn.rm-Advance.sh 
-source $_RM_ADVANCE/add.op.rm-Advance.sh
+source $_RM_ADVANCE/op.rm-Advance.sh
 source $_RM_ADVANCE/undo.op.rm-Advance.sh
 
 function rm(){
@@ -29,17 +29,20 @@ function rm(){
             [ $? -eq 0 ] && dir_or_file+=$test
 
         elif [ ${test[1]} = "-" ]; then
-            
+            [ ${#test[@]} -eq 1 ] && echo "$_error_rm_ error -> $item" && return 1
             for item in "$test"; do
                 [ "$item" = "--undo" ] && continue
                 echo "$item" | fold -w1 | while read -r char; do
+                    [ "$char" = "v" ] && local option_v=TRUE && {
+                        [ ${#test} -eq 2 ] && test=${test/-v/} || test=${test/v/}
+                    }
                     [[ $char = "-" ]] && continue
-                    if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i" -o $char = "v" -o $char = "f" -o $char = "R" -o $char = "r" ]; then
+                    [[ $char = "v" ]] && test=${test/v/} && local option_v=TRUE && continue
+                    if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i"  -o $char = "f" -o $char = "R" -o $char = "r" ]; then
                         continue
                     else
-                        echo "$_error_rm_: No option -> $item"
+                        echo "$_error_rm_ No option -> $item"
                         return 1
-                        # command cat -vs $HOME/.config/zsh/function/RM/help.rm-Advance && return 130
                     fi
                 done
             done
@@ -62,6 +65,7 @@ function rm(){
             _default_home_rm_Advance "$_error_rm_ " $(pwd)/$i " :No such file or directory."
             echo
         done
+        return 1
     fi
 
  # delete from dir_or_file
@@ -70,7 +74,7 @@ function rm(){
             _main_rm_Advance $fd
         done
     elif [ ${#options_rm[@]} -ne 0 ]; then 
-        echo "$_error_rm_: only option"
+        echo "$_error_rm_ only option." && return 1
     fi
 }
 
@@ -81,6 +85,22 @@ _check_permission_denied(){
             echo ". \033[4;31m $1 :Permission denied.\033[0m" && return 1
         fi
     done && return 0
+}
+_filter_option(){
+    for item in "$1"; do
+        [ "$item" = "--undo" ] && continue
+        echo "$item" | fold -w1 | while read -r char; do
+            [[ $char = "-" ]] && continue
+            [ "$char" = "v" ] && ${1/v/} && continue
+            if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i"  -o $char = "f" -o $char = "R" -o $char = "r" ]; then
+                continue
+            else
+                echo "$_error_rm_: No option -> $item"
+                return 1
+            fi
+        done
+    done
+    return 0
 }
 
 _default_home_rm_Advance(){

@@ -40,9 +40,3 @@ function run(){
         return 0
     fi
 }
-
-#------------- 
-function df(){
-    ./df
-    rm df
-}

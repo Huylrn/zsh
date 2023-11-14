@@ -24,7 +24,6 @@ alias "?"='cd /Users/huuynguyen/WorkSpace/'
 
 alias v='nvim'
 
-alias du='dust'
 alias st='btm'
 
 alias status='btm'

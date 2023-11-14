@@ -1,5 +1,5 @@
 b(){ 
-    tmp=${1##*.}
+    local tmp=${1##*.}
     if [ -n $tmp ]; then
         bat $1
     else
