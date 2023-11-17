@@ -1,4 +1,5 @@
 #ALIAS
+
 alias gf='git- f'
 alias git-f='git- f'
 alias git-i='git- i'
@@ -18,7 +19,9 @@ alias l1='ls -1 --sd'
 
 alias sb='web_search bing'
 
+# function
 alias s='search'
+alias rm='rm-Advance'
 
 alias "?"='cd /Users/huuynguyen/WorkSpace/'
 

@@ -1,9 +1,9 @@
-local _RM_ADVANCE=$HOME/.config/zsh/function/RM
-source $_RM_ADVANCE/main.fn.rm-Advance.sh 
-source $_RM_ADVANCE/op.rm-Advance.sh
-source $_RM_ADVANCE/undo.op.rm-Advance.sh
+local RM_ADVANCE=$HOME/.config/zsh/function/RM
+source $RM_ADVANCE/main.fn.rm-Advance.sh 
+source $RM_ADVANCE/op.rm-Advance.sh
+source $RM_ADVANCE/undo.op.rm-Advance.sh
 
-function rm(){
+function rm-Advance(){
     
     local dir_or_file=()
     local options_rm=()
@@ -35,9 +35,8 @@ function rm(){
                 echo "$item" | fold -w1 | while read -r char; do
                     [ "$char" = "v" ] && local option_v=TRUE && {
                         [ ${#test} -eq 2 ] && test=${test/-v/} || test=${test/v/}
-                    }
+                    } && continue
                     [[ $char = "-" ]] && continue
-                    [[ $char = "v" ]] && test=${test/v/} && local option_v=TRUE && continue
                     if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i"  -o $char = "f" -o $char = "R" -o $char = "r" ]; then
                         continue
                     else
@@ -86,22 +85,6 @@ _check_permission_denied(){
         fi
     done && return 0
 }
-_filter_option(){
-    for item in "$1"; do
-        [ "$item" = "--undo" ] && continue
-        echo "$item" | fold -w1 | while read -r char; do
-            [[ $char = "-" ]] && continue
-            [ "$char" = "v" ] && ${1/v/} && continue
-            if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i"  -o $char = "f" -o $char = "R" -o $char = "r" ]; then
-                continue
-            else
-                echo "$_error_rm_: No option -> $item"
-                return 1
-            fi
-        done
-    done
-    return 0
-}
 
 _default_home_rm_Advance(){
     printf $1 && printf ${2/\/Users\/huynguyen/\~} && printf $3
@@ -112,3 +95,31 @@ _message_output_rm_Advance(){
     [ $1 = "deleted" ] && printf "\033[0;35m[Message]\033[0m"
     [ $1 = "recover" ] && printf "\033[0;30m[Message]\033[0m"
 }
+
+_rm-Advance(){
+    local cur prev words
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    words=""
+    case "${prev}" in
+        rm-Advance)
+            complete -o default rm-Advance
+            ;;
+        -u)
+            cat ~/.Trash/.undo_cache
+            # complete -o default -C "$(cat ~/.Trash/.undo_cache)" rm-Advance
+            ;;
+        -h|--help)
+            return
+            ;;
+
+    esac 
+    # COMPREPLY=($(compgen -W "$words" -- ${cur}))
+
+    if [[ ${cur} == -* ]] ; then
+        COMPREPLY=($(compgen -W "-u -v -f -r -R --help" -- ${cur}))
+        return 0
+    fi
+}
+# complete -f -F _rm-Advance rm-Advance

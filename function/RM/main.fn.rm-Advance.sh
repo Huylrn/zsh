@@ -12,39 +12,33 @@ _content_my_cache(){
         echo "Time to deleted: $(date)" >> $1/.my_cache
         echo $_mode >> $1/.my_cache
         echo ${$(realpath $1 | awk '{print $1}')%/*} >> $1/.my_cache
-        # echo ${$(realpath $1)%/*} >> $1/.my_cache
-
     fi
 }
 
-_delete_fn_rm(){
+_delete_rm_Advance(){
     _content_my_cache $1
+    local _dir=$(find $1 -type d | wc -l | awk '{print $1}')
+    local _file=$(find $1 -type f | wc -l | awk '{print $1}')
     echo "\033[5;2;3;30mDeleting...\033[0m"
     if [ -d $1 ]; then # delete -> directory 
-        local _dir=$(find $1 -type d | wc -l | awk '{print $1}')
-        local _file=$(find $1 -type f | wc -l | awk '{print $1}')
+        
+        
+        # local _name_="${"$(basename $1)"/ /\ }"
+        local _name_="$(echo "$1" | sed 's/ /\\ /g')"
+
+
+
      # same name in trash and $1_here
         [ -d $_trash_dir/"$(basename $1)" ] && {
-            local _mode=$(tail -n 2 $_trash_dir/"$(basename $1)"/.my_cache | sed -n 1p)
+            # local _mode=$(tail -n 2 $_trash_dir/"$(basename $1)"/.my_cache | sed -n 1p)
             local _replace_name=".replace_at_$(date +%H-%M-%S_%d%m%y)"
-            # local _path_undo="$(command tail -n 1 $_trash_dir/"$(basename $1)"/.my_cache)/$(basename $1)$_replace_name"
-            local _path_undo="$(command tail -n 1 $_trash_dir/"$(basename $1)"/.my_cache)"
-            echo $_mode >> $_trash_dir/"$(basename $1)"/.my_cache && echo $_path_undo >> $_trash_dir/"$(basename $1)"/.my_cache
+            # local _path_undo="$(command tail -n 1 $_trash_dir/"$(basename $1)"/.my_cache)"
+            # echo $_mode >> $_trash_dir/"$(basename $1)"/.my_cache && echo $_path_undo >> $_trash_dir/"$(basename $1)"/.my_cache
             mv $_trash_dir/"$(basename $1)" $_trash_dir/"$(basename $1)$_replace_name" # rename 
         }       
         
-        [ -d $_trash_dir/"$(basename $1)" ] && {
-            local _mode=$(tail -n 2 $_trash_dir/$(basename $1)/.my_cache | sed -n 1p)
-            local _replace_name=".replace_at_$(date +%H-%M-%S_%d%m%y)"
-            local _path_undo="$(command tail -n 1 $_trash_dir/$(basename $1)/.my_cache)/$(basename $1)$_replace_name"
-
-            echo $_mode >> $_trash_dir/$(basename $1)/.my_cache && echo $_path_undo >> $_trash_dir/$(basename $1)/.my_cache
-            mv $_trash_dir/$(basename $1) $_trash_di/$(basename $1)$_replace_name # rename 
-        }
-
      # deleting...
-        # rsync -a $1 $_trash_dir && {
-        rsync -avh --out-format="%n -> %l bytes" $1 $_trash_dir > $_RM_ADVANCE/Content/tmp.txt && { 
+        rsync -avh --out-format="%n -> %l bytes" $1 $_trash_dir > $RM_ADVANCE/Content/tmp.txt && { 
             trap 'echo "\n\033[0;31mERROR\033[0m"' SIGINT # Get out with output 130 when used Ctrl+c.
             command rm ${options_rm[@]} $1
             local _check_error=$?
@@ -53,8 +47,11 @@ _delete_fn_rm(){
         
      # Has it been deleted or not
         [ $_check_error -eq 0 ] && { 
+         #
+            echo "$_name_" >> ~/.Trash/.undo_cache  
+
          # option v
-            _show_output_rm_Advance $_dir $_file
+            _show_output_rm_Advance $_dir $(($_file-1))
 
          # deleted
             _message_output_rm_Advance deleted
@@ -70,7 +67,7 @@ _delete_fn_rm(){
                 if [ $? -eq 1 ]; then 
                     return 1 
                 else
-                    _delete_fn_rm $1
+                    _delete_rm_Advance $1
                     return 0
                 fi
             } # exit 130
@@ -78,6 +75,9 @@ _delete_fn_rm(){
             return 1
         }
     else # delete -> file
+
+        local _name_="$(echo "$1" | sed 's/ /\\ /g')"
+        # local _name_="${"$(basename $1)"/ /\ }"
         
      # same name in trash and $1_here
         [ -f $_trash_file/"$(basename $1)" ] && {
@@ -93,8 +93,7 @@ _delete_fn_rm(){
         }
 
      # deleting...
-        rsync -a $1 $_trash_file && {
-        # rsync -avh --out-format="%n :: size -> %l bytes" $1 $_trash_file && {
+        rsync -avh --out-format="%n -> %l bytes" $1 $_trash_file > $RM_ADVANCE/Content/tmp.txt&& {
             trap 'echo "\n\033[0;31mERROR\033[0m"' SIGINT # Get out with exit 130 when used Ctrl+c.
             command rm ${options_rm[@]} $1
             local _check_error=$?
@@ -102,22 +101,26 @@ _delete_fn_rm(){
          
      # Has it been deleted or not
         [ $_check_error -eq 0 ] && {
+         #
+            echo "$_name_" >> ~/.Trash/.undo_cache  
+         
+         # option -v
+            _show_output_rm_Advance "none" "none"
 
-            # deleted
+         # deleted
             _message_output_rm_Advance deleted
             echo " \033[4;3;31m$1\033[0m is \033[3;1;32m($_type_)\033[0m ->\033[0m \033[3;32mSuccessfully deleted.\033[0m" 
         } || {
 
-            # Not
+         # Not
             echo "Exit $_check_error"
             rsync -a $_trash_file/"$(basename $1)" $(realpath $1) && command rm -rf $_trash_file/"$(basename $1)" # return deleted file
-            # rsync -a $_trash_file/"$(basename $1)" $(realpath $(basename $1)) && command rm -rf $_trash_file/"$(basename $1)" # return deleted file
             [ $_check_error = 130 ] && {
                 _add_option_rm_Advance $1 f "Manual"
                 if [ $? -eq 1 ]; then 
                     return 1 
                 else
-                    _delete_fn_rm $1
+                    _delete_rm_Advance $1
                     return 0
                 fi
             } # exit 130
@@ -148,7 +151,7 @@ _main_rm_Advance(){
                 return 1
             fi
         }
-        _delete_fn_rm $1
+        _delete_rm_Advance $1
     else
         printf "-> ${$(realpath $1)%/*}/\033[0;31m$1($(command ls -ld $1 | awk '{print $3}'))\033[0m\033[3;32m is not yours, to skip[y/n]:\033[0m"
         read -q tf
@@ -161,7 +164,7 @@ _main_rm_Advance(){
                 fi
             }
             sudo chmod g+w $1 &&
-            [ $? -eq 0 ] && _delete_fn_rm $1 || return 1
+            [ $? -eq 0 ] && _delete_rm_Advance $1 || return 1
         else
             return 1
         fi

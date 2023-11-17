@@ -1,2 +1,26 @@
+#!/bin/bash
+
+echo "checkout"
+echo "clone"
+echo "branch"
+command ls ~/.Trash/file
+# Print the envrionment variables relevant to bash autocompletion
+# env | grep COMP > /tmp/log
+
+
+
+
+
+
+
+# for i in $(command ls -1 $(pwd)); do
+#     echo "$i"
+# done
+
+
+
+
+
+
 #compdef
-:completion:ts:ts
+# :completion:ts:ts

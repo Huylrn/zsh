@@ -36,13 +36,6 @@ _recover_undo_rm_Advance(){
             echo "$_error_rm_ when recover $1 ($3)"
             return 1
         }
-        # [ $? -eq 0 ] && {
-        #     _message_output_rm_Advance recover
-        #     echo " -> \033[0m \033[3;32mSuccessfully recover.\033[0m"
-        # } || {
-        #     echo "$_error_rm_ when recover $1 ($3)"
-        #     return 1
-        # }
     
     elif [[ $3 = "file" ]]; then
         local _mode=$(tail -n 2 $_trash_file/$1 | sed -n 1p)
@@ -65,6 +58,14 @@ _recover_undo_rm_Advance(){
 }
 
 _filter_undo_rm_Advance(){ # filter file or dir
+    local _name_="$(echo "$1" | sed 's/ /\\ /g')"
+    local f_undo="${$(grep -Fn "$_name_" ~/.Trash/.undo_cache | awk '{print $1}')%:*}"
+    [ ! -z $f_undo ] && sed -i.old ''$f_undo'd' ~/.Trash/.undo_cache
+
+
+
+
+
     _message_require_recover_fn_rm=TRUE
     if [ -d $_trash_dir/$1 ]; then
         local _type_dirT="dir"
@@ -79,7 +80,7 @@ _filter_undo_rm_Advance(){ # filter file or dir
         [[ $tf = "y" ]] && _recover_undo_rm_Advance $1 $(pwd) $_type_fileT $2 || _recover_undo_rm_Advance $1 $_path_fileT $_type_fileT $2
     else
         _message_output_rm_Advance error
-        echo " -> $1 :No such file or directory in trash. ?????nnn?????"
+        echo " -> $1 :No such file or directory in trash."
         return 1 
     fi
 }
@@ -87,14 +88,18 @@ _filter_undo_rm_Advance(){ # filter file or dir
 _option_undo_fn_rm(){ # option -u --undo
     if [ ${#options_rm[@]} -eq 1 ]; then
         if [ $options_rm[@] = "--undo" -o $options_rm[@] = "-u" ]; then
+            
             if [ ${#dir_or_file[@]} -ne 0 ]; then
                 for name in ${dir_or_file[@]}; do            
                     if [ -d $_trash_dir/$name -o -f $_trash_file/$name ]; then
                         _filter_undo_rm_Advance $name ".recover"
                     else
                         _message_output_rm_Advance error
-                        echo " -> $name :No such file or directory in trash. ??????jjj ????"; fi
-                done; fi
+                        echo " -> $name :No such file or directory in trash."; 
+                    fi
+                done
+            fi
+            
             if [ ${#dir_or_file_none[@]} -ne 0 ]; then
                 for input in $dir_or_file_none[@]; do
                     _filter_undo_rm_Advance $input
@@ -102,9 +107,8 @@ _option_undo_fn_rm(){ # option -u --undo
             elif [ ${#dir_or_file[@]} -eq 0 ]; then
                 echo "$_error_rm_ only option ??"
             fi
-        
         else
-            echo " [option: ${options_rm[@]}] :bad substitution." && return 1; fi
+            echo "$_error_rm_ [option: ${options_rm[@]}] :bad substitution." && return 1; fi
     else 
-        echo " [option: ${options_rm[@]}] :bad substitution." && return 1; fi
+        echo "$_error_rm_ [option: ${options_rm[@]}] :bad substitution." && return 1; fi
 }
