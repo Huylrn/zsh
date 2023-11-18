@@ -2,6 +2,7 @@ local RM_ADVANCE=$HOME/.config/zsh/function/RM
 source $RM_ADVANCE/main.fn.rm-Advance.sh 
 source $RM_ADVANCE/op.rm-Advance.sh
 source $RM_ADVANCE/undo.op.rm-Advance.sh
+source $RM_ADVANCE/compdef.rm-Advance.sh #auto completion
 
 function rm-Advance(){
     
@@ -95,31 +96,3 @@ _message_output_rm_Advance(){
     [ $1 = "deleted" ] && printf "\033[0;35m[Message]\033[0m"
     [ $1 = "recover" ] && printf "\033[0;30m[Message]\033[0m"
 }
-
-_rm-Advance(){
-    local cur prev words
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    words=""
-    case "${prev}" in
-        rm-Advance)
-            complete -o default rm-Advance
-            ;;
-        -u)
-            cat ~/.Trash/.undo_cache
-            # complete -o default -C "$(cat ~/.Trash/.undo_cache)" rm-Advance
-            ;;
-        -h|--help)
-            return
-            ;;
-
-    esac 
-    # COMPREPLY=($(compgen -W "$words" -- ${cur}))
-
-    if [[ ${cur} == -* ]] ; then
-        COMPREPLY=($(compgen -W "-u -v -f -r -R --help" -- ${cur}))
-        return 0
-    fi
-}
-# complete -f -F _rm-Advance rm-Advance

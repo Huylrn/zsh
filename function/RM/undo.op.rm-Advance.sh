@@ -58,14 +58,6 @@ _recover_undo_rm_Advance(){
 }
 
 _filter_undo_rm_Advance(){ # filter file or dir
-    local _name_="$(echo "$1" | sed 's/ /\\ /g')"
-    local f_undo="${$(grep -Fn "$_name_" ~/.Trash/.undo_cache | awk '{print $1}')%:*}"
-    [ ! -z $f_undo ] && sed -i.old ''$f_undo'd' ~/.Trash/.undo_cache
-
-
-
-
-
     _message_require_recover_fn_rm=TRUE
     if [ -d $_trash_dir/$1 ]; then
         local _type_dirT="dir"

@@ -21,19 +21,9 @@ _delete_rm_Advance(){
     local _file=$(find $1 -type f | wc -l | awk '{print $1}')
     echo "\033[5;2;3;30mDeleting...\033[0m"
     if [ -d $1 ]; then # delete -> directory 
-        
-        
-        # local _name_="${"$(basename $1)"/ /\ }"
-        local _name_="$(echo "$1" | sed 's/ /\\ /g')"
-
-
-
      # same name in trash and $1_here
         [ -d $_trash_dir/"$(basename $1)" ] && {
-            # local _mode=$(tail -n 2 $_trash_dir/"$(basename $1)"/.my_cache | sed -n 1p)
             local _replace_name=".replace_at_$(date +%H-%M-%S_%d%m%y)"
-            # local _path_undo="$(command tail -n 1 $_trash_dir/"$(basename $1)"/.my_cache)"
-            # echo $_mode >> $_trash_dir/"$(basename $1)"/.my_cache && echo $_path_undo >> $_trash_dir/"$(basename $1)"/.my_cache
             mv $_trash_dir/"$(basename $1)" $_trash_dir/"$(basename $1)$_replace_name" # rename 
         }       
         
@@ -47,9 +37,6 @@ _delete_rm_Advance(){
         
      # Has it been deleted or not
         [ $_check_error -eq 0 ] && { 
-         #
-            echo "$_name_" >> ~/.Trash/.undo_cache  
-
          # option v
             _show_output_rm_Advance $_dir $(($_file-1))
 
@@ -75,10 +62,6 @@ _delete_rm_Advance(){
             return 1
         }
     else # delete -> file
-
-        local _name_="$(echo "$1" | sed 's/ /\\ /g')"
-        # local _name_="${"$(basename $1)"/ /\ }"
-        
      # same name in trash and $1_here
         [ -f $_trash_file/"$(basename $1)" ] && {
 
@@ -101,9 +84,6 @@ _delete_rm_Advance(){
          
      # Has it been deleted or not
         [ $_check_error -eq 0 ] && {
-         #
-            echo "$_name_" >> ~/.Trash/.undo_cache  
-         
          # option -v
             _show_output_rm_Advance "none" "none"
 

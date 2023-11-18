@@ -58,7 +58,7 @@ function search (){
 }
 _search() 
 {
-    local cur prev words
+    local cur prev words cur_upper
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
