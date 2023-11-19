@@ -1,42 +1,18 @@
 function run(){
-    if [[ ${1#*.} = sh ]] || [[ ${1#*.} = shell ]] || [[ ${1#*.} = zsh ]]; then
-        ./$1
-        echo "Exit: 0"
-        return 0
-    fi
-# Run c++
-    if [ ${1#*.} = cpp  ]; then
-        g++ $1 -o df
-        
-        # stop when error
-        if [ ! -f $(pwd)/df ]; then
-            return 0
-        fi
-        
-        ./df
-        echo "Exit: 0"
-        rm df 
-        return 0
-    fi
-
-# Run c
-    if [ ${1#*.} = c  ]; then
-        gcc $1 -o df
-        
-        # stop when error
-        if [ ! -f $(pwd)/df ]; then
-            return 0
-        fi
-        ./df
-        echo "Exit: 0"
-        rm df
-        return 0
-    fi
-
-# Run python
-    if [ ${1#*.} = py  ]; then
-        python3 $1
-        echo "Exit: 0"
-        return 0
-    fi
+    local tail temp here
+    tail="${1#*.}"
+    case "$tail" in 
+        sh|shell|zsh|bash|py)
+            [ ! $(test -x $1) ] && chmod u+x $1 && ./$1
+            ;;
+        cpp|c)
+            here=$(pwd)
+            cd "${$(realpath $1)%/*}"
+            [ $tail = "cpp" ] && g++ $1 -o temp || gcc $1 -o temp
+            [ $? -eq 1 ] && echo "\033[1;7;31m $(basename $1) \033[0m" && return 1 || ./temp && command rm temp
+            cd $here
+            ;;
+    esac
+    echo "\033[5;32m...\033[0m"
+    echo "\033[1;7;36m $(basename $1) \033[0m"
 }

@@ -1,0 +1,31 @@
+#compdef search
+_search(){
+    _arguments -n \
+        {-y,--youtube}":Search for Youtube" \
+        {-t,--translate}'[Translation <en-vn> <input:en, vn>]:*:Clipboard:->opsT' \
+        {-b,--bing}":Search with bing" \
+        {-h,--help}":help" \
+        {-g,--github}"[Search for Github with my repository]:*:Repository:->opsG"
+    case "$state" in
+        opsG)
+            _values "Repository" \
+                "MacOS[config, nvim, ....]:macos: _files -W ~/WorkSpace/MacOS" \
+                "zsh[tools]:macos: _files -W ~/.config/zsh" \
+                "Learn[C++, HTML, ...]:macos: _files -W ~/WorkSpace/VsCode/Learn" \
+                "Docs[Shell, Vim, Git, ...]:macos: _files -W ~/WorkSpace/Documents/Docs" \
+                "TEMP[temp C ...]:macos: _files -W ~/WorkSpace/TEMP" \
+            
+            # Docs zsh Learn TEMP
+            return 
+            ;;
+        opsT)
+            _values -s = "Command" \
+                "input[Translate vn-en]:input:_values "input" vn en" \
+            ;;
+        opsB)
+            ;;
+    esac      
+    return
+}
+
+compdef _search search

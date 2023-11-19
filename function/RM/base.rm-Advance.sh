@@ -2,7 +2,7 @@ local RM_ADVANCE=$HOME/.config/zsh/function/RM
 source $RM_ADVANCE/main.fn.rm-Advance.sh 
 source $RM_ADVANCE/op.rm-Advance.sh
 source $RM_ADVANCE/undo.op.rm-Advance.sh
-source $RM_ADVANCE/compdef.rm-Advance.sh #auto completion
+source $RM_ADVANCE/Completion/compdef.rm-Advance.sh #auto completion
 
 function rm-Advance(){
     

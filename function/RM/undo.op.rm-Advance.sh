@@ -1,17 +1,18 @@
 _message_undo_rm_Advance(){
     if [ $_message_require_recover_fn_rm = "TRUE" ]; then
-        # if [ $_type_undo = "dir" ]; then
-            [ $2 != "$(pwd)/" ] && {
-                echo -n "The $3 will be recover at old path " && _default_home_rm_Advance "(" $2 ")." && echo
-                echo -n "If you want recover here" && _default_home_rm_Advance " (" "$(pwd)/" ") [y/n]:" 
-                read -q tf
-                echo 
-            } || local tf="n"
-            [ ${#4} -ne 0 ] && echo "The name is the same while being recover should be renamed -> $1$4"
-            _default_home_rm_Advance "-> " $2$1$4 "($3)"
-            echo
-            return 0
+        [ $2 != "$(pwd)/" ] && {
+            echo -n "The $3 will be recover at old path " && _default_home_rm_Advance "(" $2 ")." && echo
+            echo -n "If you want recover here" && _default_home_rm_Advance " (" "$(pwd)/" ") [y/n]:" 
+            read -q tf
+            echo 
+        } || local tf="n"
+        [ ${#4} -ne 0 ] && echo "The name is the same while being recover should be renamed -> $1$4"
+        echo "\033[5;2;3;30mRecover...\033[0m"
+        _default_home_rm_Advance "-> " $2$1$4 "($3)"
+        echo
+        return 0
     else
+        echo "\033[5;2;3;30mRecover...\033[0m"
          _default_home_rm_Advance "-> " $2$1$4 "($3)"
         local tf="n"
         return 0

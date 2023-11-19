@@ -1,0 +1,9 @@
+#compdef web-search
+_web-search(){
+    _arguments \
+        "1:Tool:(bing google)" \
+        "2:Text"
+    return
+}
+
+compdef _web-search web-search

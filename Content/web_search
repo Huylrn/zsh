@@ -1,9 +1,9 @@
-  --help       -h : Help
-  text         -b : Search with bing
-  translate    -t : Translation; input = [vn,en]
-  youtube      -y : Youtube
-  github       -g : Github  [ 1: Learn
-                              2: Docs
-                              3: TEMP
-                              4: zsh
-                              5: MacOS ]
+  --help         -h : Help
+  --bing         -b : Search with bing
+  --translate    -t : Translation; input = [vn,en]
+  --youtube      -y : Youtube
+  --github       -g : Github [  1: Learn
+                                2: Docs
+                                3: TEMP
+                                4: zsh
+                                5: MacOS ]

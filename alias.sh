@@ -1,8 +1,7 @@
 #ALIAS
 
-alias gf='git- f'
-alias git-f='git- f'
-alias git-i='git- i'
+alias gf='my_git -f'
+alias ginit='my_git -i'
 alias gp='git pull'
 alias gs='git push'
 alias gst='git status'
@@ -17,13 +16,9 @@ alias ll='ls --tree --sd'
 alias la='ls -a --sd'
 alias l1='ls -1 --sd'
 
-alias sb='web_search bing'
-
 # function
 alias s='search'
 alias rm='rm-Advance'
-
-alias "?"='cd /Users/huuynguyen/WorkSpace/'
 
 alias v='nvim'
 
@@ -34,7 +29,7 @@ alias z='cd ..'
 alias zz='cd ../..'
 alias zzz='cd ../../..'
 
-alias pwc='copypath'
+alias pwc='pwd | clipcopy'
 
 alias "fzf-p"='fzf --preview "bat --color=always --style=numbers --line-range=:1000 {}"'
 
@@ -42,5 +37,6 @@ alias c='code'
 alias ec='echo'
 
 alias orm='command rm'
+alias zshrc='nvim ~/.zshrc && source ~/.zshrc'
 alias Drive_Huuy='/Users/$(whoami)/Library/CloudStorage/GoogleDrive-huuynguyendd@gmail.com/My\ Drive'
 alias OneDrive='/Users/$(whoami)/Library/CloudStorage/OneDrive-Personal'
