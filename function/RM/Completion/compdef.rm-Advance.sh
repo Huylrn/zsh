@@ -20,12 +20,25 @@ _rm-Advance(){
      _arguments -s $args && ret=0
     case "$state" in
         (opsU)
-            eval $(echo "_files -W ~/.Trash/dir && _files -W ~/.Trash/file ")
+            [ -z $(command ls -A ~/.Trash/file | grep -v '^.DS_Store$') -a -z $(command ls -A ~/.Trash/dir | grep -v '^.DS_Store$') ] && {
+                _arguments \
+                    "*:empty trash"
+                return
+            } || {
+                _files -W ~/.Trash/dir
+                _files -W ~/.Trash/file
+            }
             ;;
         (file)
-            (( CURRENT > 0 )) && line[CURRENT]=()
-            line=( ${line//(#m)[\[\]()\\*?#<>~\^\|]/\\$MATCH} )
-            _files -F line && ret=0
+            [[ -z $(command ls -A) ]] && {
+                local arg
+                _describe 'empty' arg
+                 return
+            } || {
+                (( CURRENT > 0 )) && line[CURRENT]=()
+                line=( ${line//(#m)[\[\]()\\*?#<>~\^\|]/\\$MATCH} )
+                _files -F line && ret=0
+            }
             ;;
     esac      
     return $ret

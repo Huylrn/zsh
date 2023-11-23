@@ -28,12 +28,14 @@ function search (){
             web-search bing $key ;; 
         
         --youtube|-y)
-            [ -z $2 ] && open https://www.youtube.com || open "https://www.youtube.com/results?search_query=$2" ;;
+            [ -z $2 ] && open https://www.youtube.com || web-search youtube ${@:2} ;;
+            # [ -z $2 ] && open https://www.youtube.com || open "https://www.youtube.com/results?search_query=$2" ;;
         
         --github|-g)
             local path_gb branch
             path_gb=https://github.com/Huylrn
             branch=master
+            [ $2 = "." ] && open "$path_gb/$(basename $(pwd))" && return 
             [ -z ${2#*=} ] && open $path_gb/${2/=/} || open $path_gb/${2%=*}/tree/$branch/${2#*=}
             ;;
 
@@ -43,4 +45,5 @@ function search (){
         *)
             open -a Microsoft\ Edge\ Dev ;;
     esac
+    return
 }

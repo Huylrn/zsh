@@ -2,8 +2,11 @@ function run(){
     local tail temp here
     tail="${1#*.}"
     case "$tail" in 
-        sh|shell|zsh|bash|py)
+        sh|shell|zsh|bash)
             [ ! $(test -x $1) ] && chmod u+x $1 && ./$1
+            ;;
+        py)
+            python3 $1
             ;;
         cpp|c)
             here=$(pwd)

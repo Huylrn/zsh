@@ -5,16 +5,15 @@ _message_undo_rm_Advance(){
             echo -n "If you want recover here" && _default_home_rm_Advance " (" "$(pwd)/" ") [y/n]:" 
             read -q tf
             echo 
-        } || local tf="n"
+        } 
         [ ${#4} -ne 0 ] && echo "The name is the same while being recover should be renamed -> $1$4"
         echo "\033[5;2;3;30mRecover...\033[0m"
-        _default_home_rm_Advance "-> " $2$1$4 "($3)"
+        [[ $tf = "y" ]] && _default_home_rm_Advance "-> " $(pwd)/$1$4 "($3)" || _default_home_rm_Advance "-> " $2$1$4 "($3)"
         echo
         return 0
     else
         echo "\033[5;2;3;30mRecover...\033[0m"
          _default_home_rm_Advance "-> " $2$1$4 "($3)"
-        local tf="n"
         return 0
     fi
 }
@@ -22,7 +21,11 @@ _message_undo_rm_Advance(){
 _recover_undo_rm_Advance(){
     if [[ $3 = "dir" ]]; then
         local _mode=$(tail -n 2 $_trash_dir/$1/.my_cache | sed -n 1p)
-        rsync -a --exclude=.my_cache $_trash_dir/$1 $2/$1$4 && chmod $_mode $2/$1$4
+        if [ -z $4 ]; then 
+            rsync -a --exclude=.my_cache $_trash_dir/$1 $2 && chmod $_mode $2/$1$4 
+        else
+            rsync -a --exclude=.my_cache $_trash_dir/$1 $2/$1$4 && chmod $_mode $2/$1$4
+        fi
         [ $? -eq 0 ] && {
             command rm -r $_trash_dir/$1 
             [ $? -eq 0 ] && {

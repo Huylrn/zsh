@@ -1,9 +1,7 @@
 _check_option_fn_rm(){
     for item in "${options_rm[@]}"; do
         echo "$item" | fold -w1 | while read -r char; do
-            if [[ $char = $1 ]]; then
-                return 0 
-            fi
+            [ $char = "$1" ] && return 0 
         done
     done
     return 1

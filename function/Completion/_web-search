@@ -1,7 +1,7 @@
 #compdef web-search
 _web-search(){
     _arguments \
-        "1:Tool:(bing google)" \
+        "1:Tool:(bing google youtube yahoo yandex duckduckgo)" \
         "2:Text"
     return
 }

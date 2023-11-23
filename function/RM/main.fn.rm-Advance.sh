@@ -1,13 +1,12 @@
 _content_my_cache(){
     local _mode=$(stat -f %A $1) # save 
+    [ $(command ls -ld $1 | awk '{print $3}') = $(whoami) ] && chmod 777 $1 || sudo chmod 777 $1
     if [ -f $1 ]; then
-        chmod 777 $1
         echo >> $1
         echo "Time to deleted: $(date)" >> $1
         echo $_mode >> $1
         echo $(realpath $1) >> $1
     else
-        chmod 777 $1
         echo >> $1/.my_cache
         echo "Time to deleted: $(date)" >> $1/.my_cache
         echo $_mode >> $1/.my_cache
@@ -121,7 +120,7 @@ _main_rm_Advance(){
         if ! test -r $1; then
             echo "$_error_rm_ $1: Permission denied."
             return 1
-        fi
+fi
     fi
     
     if [ $(command ls -ld $1 | awk '{print $3}') = $(whoami) ]; then
@@ -136,14 +135,14 @@ _main_rm_Advance(){
         printf "-> ${$(realpath $1)%/*}/\033[0;31m$1($(command ls -ld $1 | awk '{print $3}'))\033[0m\033[3;32m is not yours, to skip[y/n]:\033[0m"
         read -q tf
         echo 
-        if [[ $tf = "y" ]] || [[ $tf = "Y" ]]; then
+        if [ $tf = "y" ]; then
             [ -d $1 ] && {
                 _add_option_rm_Advance $1 r "Auto"
                 if [ $? -eq 1 ]; then
                     return 1
                 fi
             }
-            sudo chmod g+w $1 &&
+            sudo chmod g+w $1
             [ $? -eq 0 ] && _delete_rm_Advance $1 || return 1
         else
             return 1

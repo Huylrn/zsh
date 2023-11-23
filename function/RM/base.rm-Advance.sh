@@ -4,8 +4,11 @@ source $RM_ADVANCE/op.rm-Advance.sh
 source $RM_ADVANCE/undo.op.rm-Advance.sh
 source $RM_ADVANCE/Completion/compdef.rm-Advance.sh #auto completion
 
+ # check .Trash
+[ ! -d $HOME/.Trash/dir ] && mkdir -p $HOME/.Trash/dir
+[ ! -d $HOME/.Trash/file ] && mkdir -p $HOME/.Trash/file
+
 function rm-Advance(){
-    
     local dir_or_file=()
     local options_rm=()
     local dir_or_file_none=()
@@ -13,13 +16,6 @@ function rm-Advance(){
     local _trash_file="$HOME/.Trash/file"
     local _error_rm_="rm-Advance:"
     
- # check .Trash
-    if [ ! -d $HOME/.Trash/dir ]; then
-        mkdir -p $HOME/.Trash/dir
-    fi 
-    if [ ! -d $HOME/.Trash/file ]; then
-        mkdir -p $HOME/.Trash/file
-    fi
     
  # filter from input
     for test in $@; do
@@ -37,8 +33,8 @@ function rm-Advance(){
                     [ "$char" = "v" ] && local option_v=TRUE && {
                         [ ${#test} -eq 2 ] && test=${test/-v/} || test=${test/v/}
                     } && continue
-                    [[ $char = "-" ]] && continue
-                    if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i"  -o $char = "f" -o $char = "R" -o $char = "r" ]; then
+                    [ $char = "-" ] && continue
+                    if [ $char = "u" -o $char = "W" -o $char = "d" -o $char = "P" -o $char = "i"  -o $char = "f" -o $char = "R" -o $char = "r" -o $char = "i" ]; then
                         continue
                     else
                         echo "$_error_rm_ No option -> $item"
@@ -62,8 +58,7 @@ function rm-Advance(){
     
     if [ ${#dir_or_file_none[@]} -ne 0 ]; then
         for i in $dir_or_file_none; do
-            _default_home_rm_Advance "$_error_rm_ " $(pwd)/$i " :No such file or directory."
-            echo
+            echo "$_error_rm_ " $i " :No such file or directory."
         done
         return 1
     fi
