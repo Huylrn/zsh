@@ -6,8 +6,8 @@ _message_undo_rm_Advance(){
             read -q tf
             echo 
         } 
-        [ ${#4} -ne 0 ] && echo "The name is the same while being recover should be renamed -> $1$4"
         echo "\033[5;2;3;30mRecover...\033[0m"
+        [ ${#4} -ne 0 ] && echo "The name is the same while being recover should be renamed -> $1$4"
         [[ $tf = "y" ]] && _default_home_rm_Advance "-> " $(pwd)/$1$4 "($3)" || _default_home_rm_Advance "-> " $2$1$4 "($3)"
         echo
         return 0
