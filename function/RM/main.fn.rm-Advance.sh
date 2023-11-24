@@ -113,14 +113,14 @@ _main_rm_Advance(){
     if [ ! -d $1 -a ! -f $1 ]; then
         echo "rm-Advance: $(realpath $1) :No such file or directory."
         return 1
-    elif _check_option_fn_rm u; then
+    elif _check_option_rm_Advance u; then
         [ $? -eq 0 ] && echo "  [option: ${options_rm[@]}] :bad substitution."; return 1
     else 
         [ -d $1 ] && local _type_="Dir" || local _type_="File"
         if ! test -r $1; then
             echo "$_error_rm_ $1: Permission denied."
             return 1
-fi
+        fi
     fi
     
     if [ $(command ls -ld $1 | awk '{print $3}') = $(whoami) ]; then

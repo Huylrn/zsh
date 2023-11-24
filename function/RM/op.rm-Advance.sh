@@ -1,4 +1,4 @@
-_check_option_fn_rm(){
+_check_option_rm_Advance(){
     for item in "${options_rm[@]}"; do
         echo "$item" | fold -w1 | while read -r char; do
             [ $char = "$1" ] && return 0 
@@ -8,7 +8,7 @@ _check_option_fn_rm(){
 }
 
 _add_option_rm_Advance(){
-    _check_option_fn_rm $2
+    _check_option_rm_Advance $2
     if [ $? -eq 1 ]; then
         if [ "$_auto_add_option_rm_Advance" = "TRUE" ]; then 
             [ -d $1 -o -f $1 ] && {

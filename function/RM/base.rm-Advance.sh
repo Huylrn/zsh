@@ -50,9 +50,9 @@ function rm-Advance(){
     done
 
  # option -u --undo
-    _check_option_fn_rm u
+    _check_option_rm_Advance u
     if [ $? -eq 0 ] ; then
-        _option_undo_fn_rm
+        _option_u_fn_rm
         [ $? -eq 0 ] && return 0 || return 1
     fi
     
