@@ -1,3 +1,17 @@
+function clean(){
+    case "$1" in
+        nvim)
+            clean_nvim
+        ;;
+    esac
+}
+
+clean_nvim(){
+    command rm -rf ~/.cache/nvim
+    command rm -rf ~/.local/share/nvim
+    command rm -rf ~/.local/state/nvim
+}
+
 function clean_library(){
     local resource resource_1 resource_2 ITEM mylibrary_path
     resource_1=~/library_temp
