@@ -1,4 +1,4 @@
-_message_undo_rm_Advance(){
+_message_u_rm_Advance(){
     if [ $_message_require_recover_fn_rm = "TRUE" ]; then
         [ $2 != "$(pwd)/" ] && {
             echo -n "The $3 will be recover at old path " && _default_home_rm_Advance "(" $2 ")." && echo
@@ -18,7 +18,7 @@ _message_undo_rm_Advance(){
     fi
 }
 
-_recover_undo_rm_Advance(){
+_recover_u_rm_Advance(){
     if [[ $3 = "dir" ]]; then
         local _mode=$(tail -n 2 $_trash_dir/$1/.my_cache | sed -n 1p)
         if [ -z $4 ]; then 
@@ -67,13 +67,13 @@ _filter_u_rm_Advance(){ # filter file or dir
         local _type_dirT="dir"
         local _path_dirT="$(command tail -n 1 $_trash_dir/$1/.my_cache)"
         _message_u_rm_Advance $1 $_path_dirT/ $_type_dirT $2 &&
-        [[ $tf = "y" ]] && _recover_undo_rm_Advance $1 $(pwd) $_type_dirT $2 || _recover_undo_rm_Advance $1 $_path_dirT $_type_dirT $2
+        [[ $tf = "y" ]] && _recover_u_rm_Advance $1 $(pwd) $_type_dirT $2 || _recover_u_rm_Advance $1 $_path_dirT $_type_dirT $2
     elif [ -f $_trash_file/$1 ]; then
         local _type_fileT="file" 
         local _path_fileT="${$(command tail -n 1 $_trash_file/$1)%/*}"
         local _temp_=$(($(wc $_trash_file/$1 | awk '{print $1}')-4))
         _message_u_rm_Advance $1 $_path_fileT/ $_type_fileT $2 && 
-        [[ $tf = "y" ]] && _recover_undo_rm_Advance $1 $(pwd) $_type_fileT $2 || _recover_undo_rm_Advance $1 $_path_fileT $_type_fileT $2
+        [[ $tf = "y" ]] && _recover_u_rm_Advance $1 $(pwd) $_type_fileT $2 || _recover_u_rm_Advance $1 $_path_fileT $_type_fileT $2
     else
         _message_output_rm_Advance error
         echo " -> $1 :No such file or directory in trash."
@@ -81,14 +81,14 @@ _filter_u_rm_Advance(){ # filter file or dir
     fi
 }
 
-_option_u_fn_rm(){ # option -u --undo
+_option_u_rm_Advance(){ # option -u --undo
     if [ ${#options_rm[@]} -eq 1 ]; then
         if [ $options_rm[@] = "--undo" -o $options_rm[@] = "-u" ]; then
             
             if [ ${#dir_or_file[@]} -ne 0 ]; then
                 for name in ${dir_or_file[@]}; do            
                     if [ -d $_trash_dir/$name -o -f $_trash_file/$name ]; then
-                        _filter_u_rm_Advance$name ".recover"
+                        _filter_u_rm_Advance $name ".recover"
                     else
                         _message_output_rm_Advance error
                         echo " -> $name :No such file or directory in trash."; 
@@ -98,7 +98,7 @@ _option_u_fn_rm(){ # option -u --undo
             
             if [ ${#dir_or_file_none[@]} -ne 0 ]; then
                 for input in $dir_or_file_none[@]; do
-                    _filter_u_rm_Advance$input
+                    _filter_u_rm_Advance $input
                 done && return 0
             elif [ ${#dir_or_file[@]} -eq 0 ]; then
                 echo "$_error_rm_ only option ??"
