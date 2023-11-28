@@ -63,7 +63,7 @@ function rm-Advance(){
         return 1
     fi
 
- # delete from dir_or_file
+    # delete from dir_or_file
     if [ ${#dir_or_file[@]} -ne 0 ]; then
         for fd in $dir_or_file[@]; do 
             _main_rm_Advance $fd

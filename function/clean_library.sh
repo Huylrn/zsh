@@ -29,7 +29,7 @@ function clean_library(){
             while read line;do
                     [ -z $line ] && continue
                     if [ $(wc -c $line | awk '{print $1}') -gt 1000000000 ]; then
-                        command mv "$line" $resource_1/BigData
+                        [ ! -f "$resource_1/BigData/$(basename $line)" ] && command mv "$line" $resource_1/BigData
                         continue
                     else
                         case "$item" in
