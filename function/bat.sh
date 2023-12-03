@@ -1,4 +1,4 @@
-b(){ 
+b() {
     local tmp=${1##*.}
     if [ -n $tmp ]; then
         bat $1
