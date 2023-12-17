@@ -73,7 +73,6 @@ function rm-Advance() {
 }
 
 _check_permission_denied() {
-    # local _temp_=${$(realpath $1)#/Users/huynguyen/}
     for i in $(echo $1 | tr / "\n"); do
         [ $i = ".Trash" ] && echo ". \033[4;31m $1 :Permission denied.\033[0m" && return 1
     done

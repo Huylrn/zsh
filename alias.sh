@@ -1,4 +1,3 @@
-
 #ALIAS
 alias gf='my_git -f'
 alias ginit='my_git -i'
@@ -29,7 +28,7 @@ alias status='btm'
 alias status='btm'
 alias z='cd ..'
 alias zz='cd ../..'
-
+alias Z='exit'
 
 alias pwc='pwd | clipcopy'
 
@@ -45,4 +44,3 @@ alias orm='command rm'
 alias zshrc='nvim ~/.zshrc && source ~/.zshrc'
 alias Drive_Huuy='/Users/$(whoami)/Library/CloudStorage/GoogleDrive-huuynguyendd@gmail.com/My\ Drive'
 alias OneDrive='/Users/$(whoami)/Library/CloudStorage/OneDrive-Personal'
-alias nx='open -a iTerm' 
