@@ -18,7 +18,6 @@ _content_my_cache() {
 
 _delete_rm_Advance() {
     _content_my_cache $1
-    echo "test"
     local _dir=$(find $1 -type d | wc -l | awk '{print $1}')
     local _file=$(find $1 -type f | wc -l | awk '{print $1}')
     echo "\033[5;2;3;30mDeleting...\033[0m"
@@ -52,7 +51,7 @@ _delete_rm_Advance() {
             echo "Exit $_check_error"
             rsync -a --exclude=.my_cache $_trash_dir/"$(basename $1)" $(dirname $(realpath $1))/. && command rm -rf $_trash_dir/"$(basename $1)" # return deleted dir
             # rsync -a --exclude=.my_cache $_trash_dir/"$(basename $1)" ${$(realpath $(basename $1))%/*}/. && command rm -rf $_trash_dir/"$(basename $1)" # return deleted dir
-            [ $_check_error = 130 ] && {
+            [ $_check_error = 130 ] && { # exit 130
                 _add_option_rm_Advance $1 f "Manual"
                 if [ $? -eq 1 ]; then
                     return 1
@@ -60,7 +59,7 @@ _delete_rm_Advance() {
                     _delete_rm_Advance $1
                     return 0
                 fi
-            }                               # exit 130
+            }
             echo "Add -f option to delete." # exit 1
             return 1
         }
@@ -98,7 +97,7 @@ _delete_rm_Advance() {
             # Not
             echo "Exit $_check_error"
             rsync -a $_trash_file/"$(basename $1)" $(realpath $1) && command rm -rf $_trash_file/"$(basename $1)" # return deleted file
-            [ $_check_error = 130 ] && {
+            [ $_check_error = 130 ] && {                                                                          # exit 130
                 _add_option_rm_Advance $1 f "Manual"
                 if [ $? -eq 1 ]; then
                     return 1
@@ -106,7 +105,7 @@ _delete_rm_Advance() {
                     _delete_rm_Advance $1
                     return 0
                 fi
-            }                               # exit 130
+            }
             echo "Add -f option to delete." # exit 1
             return 1
         }
@@ -153,5 +152,4 @@ _main_rm_Advance() {
             return 1
         fi
     fi
-
 }
