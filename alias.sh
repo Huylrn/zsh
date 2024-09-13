@@ -21,6 +21,7 @@ alias l1='ls -1 --sd'
 alias s='search'
 alias rm='rm-Advance'
 
+alias vm='open -a iTerm'
 alias v='nvim'
 
 alias st='btm'
@@ -34,11 +35,14 @@ alias pwc='pwd | clipcopy'
 
 # bat configure
 alias "fzf-p"='fzf --preview "bat --color=always --style=numbers --line-range=:1000 {}"'
+alias "f"='fzf --preview "bat --color=always --style=numbers --line-range=:1000 {}"'
 alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
 alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 
 alias c='code'
 alias ec='echo'
+
+alias win11='cd ~/Parallels/thuoc && ./Launch_Parallels.command'
 
 alias orm='command rm'
 alias ols='command ls'
