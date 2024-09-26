@@ -19,6 +19,7 @@ alias l1='ls -1 --sd'
 # function
 
 alias s='search'
+alias S='search -t input=en'
 alias rm='rm-Advance'
 
 alias vm='open -a iTerm'
