@@ -13,3 +13,4 @@ source ~/.config/zsh/function/Completion/_search            # completion _search
 source ~/.config/zsh/function/Completion/_web-search        # completion _web-search
 
 source ~/.config/zsh/alias.sh                               # alias
+source ~/.config/zsh/config_auto-complete                   # alias
