@@ -10,12 +10,13 @@ alias gsh='git show'
 alias gl='git log'
 alias gd='git diff --name-only --relative --diff-filter=d | xargs bat --diff'
 
-# if [ $TERM_PROGRAM = "Apple_Terminal" ]; then
-# alias ls='colorls --sd'
-# alias l='ls -lA --sd'
-# alias ll='ls --tree --sd'
-# alias la='ls -A --sd'
-# alias l1='ls -1 --sd'
+if [ $TERM_PROGRAM != "Apple_Terminal" ]; then
+  alias ls='colorls --sd'
+  alias l='ls -lA --sd'
+  alias ll='ls --tree --sd'
+  alias la='ls -A --sd'
+  alias l1='ls -1 --sd'
+fi
 # function
 
 alias s='search'
